@@ -13,5 +13,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class IdeaReactionRequestDto {
     private IdeaReactionAction action;
-    private String employeeId;
 }

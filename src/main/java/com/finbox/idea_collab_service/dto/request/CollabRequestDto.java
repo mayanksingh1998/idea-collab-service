@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CollabRequestDto {
     private String ideaId;
-    private String employeeId;
     private String description;
 }

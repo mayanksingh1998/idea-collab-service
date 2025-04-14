@@ -19,7 +19,7 @@ public interface IdeaService {
 
     void deleteIdea(String ideaId);
 
-    Boolean reactOnIdea(String ideaId, IdeaReactionRequestDto ideaReactionRequestDto);
+    Boolean reactOnIdea(String ideaId, IdeaReactionRequestDto ideaReactionRequestDto, String employeeId);
 
     Idea unvoteIdea(String ideaId, String employeeId);
 

@@ -2,6 +2,8 @@ package com.finbox.idea_collab_service.manager;
 
 import com.finbox.idea_collab_service.entity.CollaborationRequest;
 
+import java.util.List;
+
 public interface IdeaCollabManager {
     CollaborationRequest createCollaborationRequest(CollaborationRequest collaborationRequest);
 
@@ -12,7 +14,7 @@ public interface IdeaCollabManager {
 
     void rejectCollaborationRequest(String requestId);
 
-    void getCollaborationRequestsByIdeaId(String ideaId);
+//    List<CollaborationRequest> getCollaborationRequestsByIdeaId(String ideaId);
 
     void getCollaborationRequestsByEmployeeId(String employeeId);
 

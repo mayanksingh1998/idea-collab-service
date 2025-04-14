@@ -4,6 +4,7 @@ import com.finbox.idea_collab_service.entity.IdeaVote;
 import com.finbox.idea_collab_service.service.IdeaService;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IdeaVoteRepository extends JpaRepository<IdeaVote, Integer> {
@@ -12,4 +13,6 @@ public interface IdeaVoteRepository extends JpaRepository<IdeaVote, Integer> {
 
     Optional<IdeaVote> findIdeaVoteByIdeaIdAndEmployeeId(String ideaId, String employeeId);
     Optional<IdeaVote> findIdeaVoteById(String ideaVoteId);
+
+    List<IdeaVote> findIdeaVotesByIdeaId(String ideaId);
 }

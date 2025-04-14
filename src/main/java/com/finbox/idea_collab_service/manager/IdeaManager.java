@@ -25,4 +25,6 @@ public interface IdeaManager {
     List<Idea> getIdeasByEmployeeId(String employeeId);
 
     IdeaVote getIdeaVoteById(String ideaVoteId);
+
+    List<IdeaVote> getIdeaVotesByIdeaId(String ideaId);
 }

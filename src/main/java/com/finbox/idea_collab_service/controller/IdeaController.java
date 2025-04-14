@@ -9,6 +9,7 @@ import com.finbox.idea_collab_service.dto.request.IdeaReactionRequestDto;
 import com.finbox.idea_collab_service.entity.Idea;
 import com.finbox.idea_collab_service.service.IdeaService;
 import com.finbox.idea_collab_service.utils.ResponseBuilder;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,9 +38,10 @@ public class IdeaController {
     @PutMapping(value = "/{ideaId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IdeaColabSvcResponse<Boolean>> reactOnIdea(
             @NonNull @PathVariable("ideaId") String ideaId,
-            @RequestBody IdeaReactionRequestDto ideaReactionRequestDto) {
+            @RequestBody IdeaReactionRequestDto ideaReactionRequestDto, HttpServletRequest request) {
+        String employeeId = (String) request.getAttribute("employeeId");
         return ResponseBuilder.build(
-                ideaService.reactOnIdea(ideaId, ideaReactionRequestDto), HttpStatus.OK);
+                ideaService.reactOnIdea(ideaId, ideaReactionRequestDto, employeeId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{ideaId}", produces = MediaType.APPLICATION_JSON_VALUE)

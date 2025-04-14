@@ -9,9 +9,11 @@ import com.finbox.idea_collab_service.manager.CollaborationRequestManager;
 import com.finbox.idea_collab_service.repository.CollaborationRequestRepository;
 import com.finbox.idea_collab_service.repository.EmployeeRepository;
 import com.finbox.idea_collab_service.repository.IdeaRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class CollaborationRequestManagerImpl implements CollaborationRequestManager {
 
     private final CollaborationRequestRepository collaborationRequestRepository;
@@ -77,12 +79,12 @@ public class CollaborationRequestManagerImpl implements CollaborationRequestMana
     }
 
     @Override
-    public List<CollaborationRequestManager> getCollaborationRequestsByIdeaId(String ideaId) {
-        return null;
+    public List<CollaborationRequest> getCollaborationRequestsByIdeaId(String ideaId) {
+        return collaborationRequestRepository.findCollaborationRequestsByIdeaId(ideaId);
     }
 
     @Override
-    public List<CollaborationRequestManager> getCollaborationRequestsByEmployeeId(String employeeId) {
-        return null;
+    public List<CollaborationRequest> getCollaborationRequestsByEmployeeId(String employeeId) {
+       return collaborationRequestRepository.findCollaborationRequestsByEmployeeId(employeeId);
     }
 }

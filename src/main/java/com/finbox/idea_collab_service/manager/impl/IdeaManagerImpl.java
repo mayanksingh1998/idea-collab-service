@@ -80,6 +80,16 @@ public class IdeaManagerImpl implements IdeaManager {
             throw new ResourceNotFoundException(
                     String.format("Employee does not exist  %s", employeeId));
         }
+        if (upvote == VoteStatus.UPVOTE){
+            idea.setVotesCount(idea.getVotesCount() + 1);
+            ideaRepository.save(idea);
+        } else if (upvote == VoteStatus.DOWNVOTE) {
+            idea.setVotesCount(idea.getVotesCount() - 1);
+            ideaRepository.save(idea);
+        } else {
+            throw new IllegalArgumentException("Invalid vote status");
+
+        }
 
         IdeaVote ideaVote = new IdeaVote();
         ideaVote.setIdea(idea);
@@ -95,7 +105,8 @@ public class IdeaManagerImpl implements IdeaManager {
 
     @Override
     public Idea getIdeaById(String ideaId) {
-        return null;
+        return ideaRepository.findIdeaById(ideaId).orElseThrow(() -> new ResourceNotFoundException(
+                String.format("Idea does not exist for Idea id = %s", ideaId)));
     }
 
     @Override
@@ -112,5 +123,10 @@ public class IdeaManagerImpl implements IdeaManager {
     public IdeaVote getIdeaVoteById(String ideaVoteId) {
         return ideaVoteRepository.findIdeaVoteById(ideaVoteId).orElseThrow(() -> new ResourceNotFoundException(
                 String.format("IdeaVote does not exist for IdeaVote id = %s", ideaVoteId)));
+    }
+
+    @Override
+    public List<IdeaVote> getIdeaVotesByIdeaId(String ideaId) {
+        return ideaVoteRepository.findIdeaVotesByIdeaId(ideaId);
     }
 }
