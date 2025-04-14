@@ -34,10 +34,7 @@ public class IdeaCollabManagerImpl implements IdeaCollabManager {
         // Implementation here
     }
 
-    @Override
-    public void getCollaborationRequestsByIdeaId(String ideaId) {
-        // Implementation here
-    }
+
 
     @Override
     public void getCollaborationRequestsByEmployeeId(String employeeId) {

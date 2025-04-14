@@ -32,12 +32,14 @@ public class Idea {
     @Column(name="description", nullable = false)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_id")
     private Employee createdBy;
+
     @CreationTimestamp
     @Column(name="created_at", nullable = false)
     private Timestamp createdAt;
+
     @UpdateTimestamp
     @Column(name="updated_at", nullable = false)
     private Timestamp updatedAt;

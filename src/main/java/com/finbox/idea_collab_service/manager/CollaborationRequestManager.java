@@ -1,5 +1,7 @@
 package com.finbox.idea_collab_service.manager;
 
+import com.finbox.idea_collab_service.entity.CollaborationRequest;
+
 import java.util.List;
 
 public interface CollaborationRequestManager {
@@ -11,7 +13,7 @@ public interface CollaborationRequestManager {
 
     void cancelCollaborationRequest(String requestId, String employeeId);
 
-    List<CollaborationRequestManager> getCollaborationRequestsByIdeaId(String ideaId);
+    List<CollaborationRequest> getCollaborationRequestsByIdeaId(String ideaId);
 
-    List<CollaborationRequestManager> getCollaborationRequestsByEmployeeId(String employeeId);
+    List<CollaborationRequest> getCollaborationRequestsByEmployeeId(String employeeId);
 }

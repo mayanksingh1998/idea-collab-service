@@ -6,12 +6,15 @@ import com.finbox.idea_collab_service.dto.request.CreateIdeaRequest;
 import com.finbox.idea_collab_service.dto.request.IdeaReactionRequestDto;
 import com.finbox.idea_collab_service.entity.Employee;
 import com.finbox.idea_collab_service.entity.Idea;
+import com.finbox.idea_collab_service.entity.IdeaVote;
+import com.finbox.idea_collab_service.entity.Tag;
 import com.finbox.idea_collab_service.helper.IdeaServiceHelper;
 import com.finbox.idea_collab_service.manager.EmployeeManager;
 import com.finbox.idea_collab_service.manager.IdeaCollabManager;
 import com.finbox.idea_collab_service.manager.IdeaManager;
 import com.finbox.idea_collab_service.mapper.CollabRequestMapper;
 import com.finbox.idea_collab_service.mapper.IdeaMapper;
+import com.finbox.idea_collab_service.repository.TagRepository;
 import com.finbox.idea_collab_service.service.IdeaService;
 import org.springframework.stereotype.Service;
 
@@ -31,13 +34,16 @@ public class IdeaServiceImpl implements IdeaService {
 
     private final IdeaCollabManager ideaCollabManager;
 
-    public IdeaServiceImpl(IdeaManager ideaManager, IdeaMapper ideaMapper, EmployeeManager employeeManager, IdeaServiceHelper ideaServiceHelper, CollabRequestMapper collabRequestMapper, IdeaCollabManager ideaCollabManager) {
+    private final TagRepository tagRepository;
+
+    public IdeaServiceImpl(IdeaManager ideaManager, IdeaMapper ideaMapper, EmployeeManager employeeManager, IdeaServiceHelper ideaServiceHelper, CollabRequestMapper collabRequestMapper, IdeaCollabManager ideaCollabManager, TagRepository tagRepository) {
         this.ideaManager = ideaManager;
         this.ideaMapper = ideaMapper;
         this.employeeManager = employeeManager;
         this.ideaServiceHelper = ideaServiceHelper;
         this.collabRequestMapper = collabRequestMapper;
         this.ideaCollabManager = ideaCollabManager;
+        this.tagRepository = tagRepository;
     }
 
 
@@ -48,14 +54,22 @@ public class IdeaServiceImpl implements IdeaService {
             // TODO: Handle the case where the employee is not found
             throw new RuntimeException("Employee not found");
         }
+        List<Tag> tags = tagRepository.findAllByIdIn(createIdeaRequest.getTagIds());
+        if (tags.size() != createIdeaRequest.getTagIds().size()) {
+            throw new RuntimeException("Some tags not found");
+        }
+
         Idea idea = ideaMapper.toIdeaDto(createIdeaRequest, employee);
+        idea.getTags().addAll(tags);
+
         return ideaManager.createIdea(idea);
     }
 
     @Override
     public IdeaResponseDto getIdeaById(String ideaId) {
         Idea idea = ideaManager.getIdeaById(ideaId);
-        return IdeaResponseDto.builder().idea(idea).build();
+        List<IdeaVote> ideaVotes = ideaManager.getIdeaVotesByIdeaId(ideaId);
+        return IdeaResponseDto.builder().idea(idea).ideaVotes(ideaVotes).build();
     }
 
     @Override
@@ -81,9 +95,9 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
-    public Boolean reactOnIdea(String ideaId, IdeaReactionRequestDto ideaReactionRequestDto) {
+    public Boolean reactOnIdea(String ideaId, IdeaReactionRequestDto ideaReactionRequestDto, String employeeId) {
         try {
-            ideaManager.voteOnIdea(ideaId, ideaReactionRequestDto.getEmployeeId(), ideaServiceHelper.getAndValidateVoteStatus(ideaReactionRequestDto.getAction()));
+            ideaManager.voteOnIdea(ideaId, employeeId, ideaServiceHelper.getAndValidateVoteStatus(ideaReactionRequestDto.getAction()));
             return true;
         }catch (Exception e){
             // TODO: Handle the case where the employee is not found

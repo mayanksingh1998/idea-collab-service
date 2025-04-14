@@ -25,6 +25,6 @@ services:
     env_file:
       - database.env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydatabase
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/idea_collab_svc
       SPRING_DATASOURCE_USERNAME: "myuser"
       SPRING_DATASOURCE_PASSWORD: "secret"
