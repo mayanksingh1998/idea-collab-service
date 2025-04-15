@@ -3,7 +3,9 @@ package com.finbox.idea_collab_service.utils;
 import com.finbox.idea_collab_service.dto.reponse.IdeaColabSvcResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ResponseBuilder {
     private ResponseBuilder() {}
 
