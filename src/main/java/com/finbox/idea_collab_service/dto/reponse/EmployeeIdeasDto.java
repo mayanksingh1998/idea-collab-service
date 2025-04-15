@@ -1,5 +1,6 @@
 package com.finbox.idea_collab_service.dto.reponse;
 
+import com.finbox.idea_collab_service.entity.Idea;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeIdeasDto {
-    List<IdeaResponseDto> ideas;
+    List<Idea> ideas;
 }

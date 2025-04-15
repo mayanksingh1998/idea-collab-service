@@ -3,6 +3,7 @@ package com.finbox.idea_collab_service.service.impl;
 import com.finbox.idea_collab_service.dto.AuthToken;
 import com.finbox.idea_collab_service.dto.reponse.LoginResponseDto;
 import com.finbox.idea_collab_service.entity.EmployeeCredential;
+import com.finbox.idea_collab_service.exception.AuthTokenExpiredException;
 import com.finbox.idea_collab_service.helper.AuthServiceHelper;
 import com.finbox.idea_collab_service.repository.EmployeeCredentialRepository;
 import com.finbox.idea_collab_service.service.AuthService;
@@ -52,24 +53,10 @@ public class AuthServiceImpl implements AuthService {
         return null;
     }
 
-    @Override
-    public String register(String username, String password, String email) {
-        return null;
-    }
 
     @Override
     public void logout(String token) {
 
-    }
-
-    @Override
-    public boolean isAuthenticated(String token) {
-        return false;
-    }
-
-    @Override
-    public String getUsernameFromToken(String token) {
-        return null;
     }
 
     @Override
@@ -78,16 +65,12 @@ public class AuthServiceImpl implements AuthService {
         AuthToken authToken = authServiceHelper.getAuthToken(token);
         if (authToken == null) {
             System.out.println("AuthToken is null");
-//            TODO: Add custom exception
-            throw new RuntimeException("Invalid or expired token");
+            throw new AuthTokenExpiredException("Invalid or expired token");
         }
 
-        System.out.println("AuthToken=======================: " + authToken);
         // Check if the token is expired
         if (authToken.getExpiry().before(new Timestamp(System.currentTimeMillis()))) {
-            //            TODO: Add custom exception
-
-            throw new RuntimeException("Token expired");
+            throw new AuthTokenExpiredException("Token expired");
         }
         if (authToken.getExpiry().before(new Timestamp(System.currentTimeMillis() + 60 * 1000))) {
             authToken.setExpiry(new Timestamp(System.currentTimeMillis() + 60 *60 * 1000));

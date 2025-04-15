@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <include file="db/changelog/sql/createEmployee.sql" relativeToChangelogFile="false"/>
+    <include file="db/changelog/sql/employeeCredentials.sql" relativeToChangelogFile="false"/>
+    <include file="db/changelog/sql/ideaTable.sql" relativeToChangelogFile="false"/>
+    <include file="db/changelog/sql/ideaVoteTable.sql" relativeToChangelogFile="false"/>
+    <include file="db/changelog/sql/collabRequestTable.sql" relativeToChangelogFile="false"/>
+    <include file="db/changelog/sql/dropUniqueConstraint.sql" relativeToChangelogFile="false"/>
+</databaseChangeLog>

@@ -1,10 +1,11 @@
 package com.finbox.idea_collab_service.service.impl;
 
 import com.finbox.idea_collab_service.dto.reponse.EmployeeIdeasDto;
-import com.finbox.idea_collab_service.dto.reponse.IdeaResponseDto;
+import com.finbox.idea_collab_service.dto.reponse.IdeaReactionsResponseDto;
 import com.finbox.idea_collab_service.dto.request.AddEmployeeRequestDto;
 import com.finbox.idea_collab_service.entity.Employee;
 import com.finbox.idea_collab_service.entity.EmployeeCredential;
+import com.finbox.idea_collab_service.entity.Idea;
 import com.finbox.idea_collab_service.helper.EmployeeServiceHelper;
 import com.finbox.idea_collab_service.manager.EmployeeManager;
 import com.finbox.idea_collab_service.mapper.EmployeeMapper;
@@ -21,15 +22,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeServiceHelper employeeServiceHelper;
 
-
-    private final EmployeeMapper employeeMapper;
-
     private final IdeaService ideaService;
 
-    public EmployeeServiceImpl(EmployeeManager employeeManager, EmployeeServiceHelper employeeServiceHelper, EmployeeMapper employeeMapper, IdeaService ideaService) {
+    public EmployeeServiceImpl(EmployeeManager employeeManager, EmployeeServiceHelper employeeServiceHelper, IdeaService ideaService) {
         this.employeeManager = employeeManager;
         this.employeeServiceHelper = employeeServiceHelper;
-        this.employeeMapper = employeeMapper;
         this.ideaService = ideaService;
     }
 
@@ -56,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeIdeasDto getEmployeeIdeas(String employeeId) {
-        List<IdeaResponseDto> employeeIdeas = ideaService.getIdeasByEmployeeId(employeeId);
+        List<Idea> employeeIdeas = ideaService.getIdeasByEmployeeId(employeeId);
         return EmployeeIdeasDto.builder()
                 .ideas(employeeIdeas)
                 .build();

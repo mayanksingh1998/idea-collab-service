@@ -1,31 +1,29 @@
 package com.finbox.idea_collab_service.service;
 
-import com.finbox.idea_collab_service.dto.reponse.IdeaResponseDto;
+import com.finbox.idea_collab_service.dto.reponse.AllIdeasResponseDto;
+import com.finbox.idea_collab_service.dto.reponse.IdeaReactionsResponseDto;
+import com.finbox.idea_collab_service.dto.reponse.IdeaResponse;
 import com.finbox.idea_collab_service.dto.request.CreateIdeaRequest;
+import com.finbox.idea_collab_service.dto.request.IdeaFilterRequest;
 import com.finbox.idea_collab_service.dto.request.IdeaReactionRequestDto;
 import com.finbox.idea_collab_service.entity.Idea;
 
 import java.util.List;
 
 public interface IdeaService {
-    Idea createIdea(CreateIdeaRequest createIdeaRequest);
+    Idea createIdea(CreateIdeaRequest createIdeaRequest, String employeeId);
 
-    IdeaResponseDto getIdeaById(String ideaId);
+    IdeaResponse getIdeaById(String ideaId);
 
-    Idea getIdeaByTitle(String title);
+    AllIdeasResponseDto getFilteredIdeas(IdeaFilterRequest request);
 
-    Idea updateIdeaStatus(String ideaId, CreateIdeaRequest createIdeaRequest);
+    IdeaReactionsResponseDto getIdeaReactionsById(String ideaId);
 
-
-    void deleteIdea(String ideaId);
 
     Boolean reactOnIdea(String ideaId, IdeaReactionRequestDto ideaReactionRequestDto, String employeeId);
 
-    Idea unvoteIdea(String ideaId, String employeeId);
+    Boolean postIdea(String ideaId, String employeeId);
 
-    List<IdeaResponseDto> getIdeasByEmployeeId(String employeeId);
-
-    Idea getIdeaByCollaborationRequestId(String requestId);
-
+    List<Idea> getIdeasByEmployeeId(String employeeId);
 
 }

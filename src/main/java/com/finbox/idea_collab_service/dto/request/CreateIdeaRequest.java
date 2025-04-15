@@ -14,6 +14,5 @@ import java.util.List;
 public class CreateIdeaRequest {
     private String title;
     private String description;
-    private String employeeId;
     private List<String> tagIds;
 }
