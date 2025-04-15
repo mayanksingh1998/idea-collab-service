@@ -16,13 +16,15 @@ import java.util.List;
 @Component
 public class IdeaMapper {
 
+    private int initialVotesCount = 0;
+
     public Idea toIdeaDto(CreateIdeaRequest idea, Employee employee) {
         Idea ideaDto = new Idea();
         ideaDto.setTitle(idea.getTitle());
         ideaDto.setDescription(idea.getDescription());
         ideaDto.setStatus(IdeaStatus.DRAFT);
         ideaDto.setCreatedBy(employee);
-        ideaDto.setVotesCount(0);
+        ideaDto.setVotesCount(initialVotesCount);
         return ideaDto;
     }
 

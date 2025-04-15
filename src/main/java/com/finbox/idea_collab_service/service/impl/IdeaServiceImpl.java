@@ -3,16 +3,17 @@ package com.finbox.idea_collab_service.service.impl;
 import com.finbox.idea_collab_service.dto.reponse.AllIdeasResponseDto;
 import com.finbox.idea_collab_service.dto.reponse.IdeaReactionsResponseDto;
 import com.finbox.idea_collab_service.dto.reponse.IdeaResponse;
+import com.finbox.idea_collab_service.dto.reponse.MetaDataResponse;
 import com.finbox.idea_collab_service.dto.request.CreateIdeaRequest;
 import com.finbox.idea_collab_service.dto.request.IdeaFilterRequest;
 import com.finbox.idea_collab_service.dto.request.IdeaReactionRequestDto;
 import com.finbox.idea_collab_service.entity.*;
+import com.finbox.idea_collab_service.exception.InvalidIdeaReactionException;
 import com.finbox.idea_collab_service.exception.UserNotAllowedForVoteException;
+import com.finbox.idea_collab_service.exception.UserNotAuthorizedException;
 import com.finbox.idea_collab_service.helper.IdeaServiceHelper;
 import com.finbox.idea_collab_service.manager.EmployeeManager;
-import com.finbox.idea_collab_service.manager.IdeaCollabManager;
 import com.finbox.idea_collab_service.manager.IdeaManager;
-import com.finbox.idea_collab_service.mapper.CollabRequestMapper;
 import com.finbox.idea_collab_service.mapper.IdeaMapper;
 import com.finbox.idea_collab_service.repository.IdeaRepository;
 import com.finbox.idea_collab_service.repository.TagRepository;
@@ -50,10 +51,7 @@ public class IdeaServiceImpl implements IdeaService {
     @Override
     public Idea createIdea(CreateIdeaRequest createIdeaRequest, String employeeId) {
         Employee employee = employeeManager.getEmployeeById(employeeId);
-        if (employee == null) {
-            // TODO: Handle the case where the employee is not found
-            throw new RuntimeException("Employee not found");
-        }
+
         List<Tag> tags = tagRepository.findAllByIdIn(createIdeaRequest.getTagIds());
         if (tags.size() != createIdeaRequest.getTagIds().size()) {
             throw new RuntimeException("Some tags not found");
@@ -72,6 +70,12 @@ public class IdeaServiceImpl implements IdeaService {
     }
 
     @Override
+    public MetaDataResponse getMetaData(String employeeId) {
+        List<Tag> tags = ideaServiceHelper.getTags();
+        return MetaDataResponse.builder().tags(tags).build();
+    }
+
+    @Override
     public AllIdeasResponseDto getFilteredIdeas(IdeaFilterRequest request) {
         // Convert sort string into Sort object
         Sort.Direction direction = Sort.Direction.fromString(request.getOrder()); // "asc" or "desc"
@@ -85,16 +89,6 @@ public class IdeaServiceImpl implements IdeaService {
 
         Timestamp startDate = (request.getStartDate() != null) ? request.getStartDate() : defaultStart;
         Timestamp endDate = (request.getEndDate() != null) ? request.getEndDate() : defaultEnd;
-
-//        if (request.getEmployeeIds() == null) {
-//            request.setEmployeeIds(Collections.emptyList());
-//        }
-//        if (request.getStatuses() == null) {
-//            request.setStatuses(Collections.emptyList());
-//        }
-//        if (request.getTags() == null) {
-//            request.setTags(Collections.emptyList());
-//        }
 
         // Call the repo method
         List<Idea> ideas =  ideaRepository.findFilteredIdeas(
@@ -128,10 +122,16 @@ public class IdeaServiceImpl implements IdeaService {
     @Override
     public Boolean reactOnIdea(String ideaId, IdeaReactionRequestDto ideaReactionRequestDto, String employeeId) {
         try {
-            ideaManager.voteOnIdea(ideaId, employeeId, ideaServiceHelper.getAndValidateVoteStatus(ideaReactionRequestDto.getAction()));
+            ideaManager.reactOnIdea(ideaId, employeeId, ideaServiceHelper.getAndValidateVoteStatus(ideaReactionRequestDto.getAction()));
             return true;
         }catch (UserNotAllowedForVoteException e){
             throw new UserNotAllowedForVoteException(e.getMessage());
+        } catch (InvalidIdeaReactionException e){
+            throw new InvalidIdeaReactionException(e.getMessage());
+        } catch (UserNotAuthorizedException e){
+            throw new UserNotAuthorizedException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 

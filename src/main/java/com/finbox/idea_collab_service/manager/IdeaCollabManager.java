@@ -10,13 +10,5 @@ public interface IdeaCollabManager {
     CollaborationRequest updateCollaborationRequest(CollaborationRequest collaborationRequest);
 
 
-    void acceptCollaborationRequest(String requestId);
-
-    void rejectCollaborationRequest(String requestId);
-
-//    List<CollaborationRequest> getCollaborationRequestsByIdeaId(String ideaId);
-
-    void getCollaborationRequestsByEmployeeId(String employeeId);
-
     CollaborationRequest getCollaborationRequestById(String requestId);
 }

@@ -4,6 +4,8 @@ import com.finbox.idea_collab_service.dto.AuthToken;
 import com.finbox.idea_collab_service.dto.reponse.LoginResponseDto;
 import com.finbox.idea_collab_service.entity.EmployeeCredential;
 import com.finbox.idea_collab_service.exception.AuthTokenExpiredException;
+import com.finbox.idea_collab_service.exception.ResourceNotFoundException;
+import com.finbox.idea_collab_service.exception.UserNotFoundException;
 import com.finbox.idea_collab_service.helper.AuthServiceHelper;
 import com.finbox.idea_collab_service.repository.EmployeeCredentialRepository;
 import com.finbox.idea_collab_service.service.AuthService;
@@ -30,16 +32,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponseDto authenticate(String email, String password) {
-        EmployeeCredential employeeCredential = employeeCredentialRepository.findEmployeeCredentialByEmployeeEmail(email);
-        System.out.println("EmployeeCredential: " + employeeCredential.getEmployee());
+        EmployeeCredential employeeCredential = employeeCredentialRepository.findEmployeeCredentialByEmployeeEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User does not exist: " + email));;
 
-        System.out.println("Password Hash: " + hashUtil.getHashedPassword(password));
-        // Check if the email and password are valid
         if (employeeCredential != null
                 && employeeCredential
                 .getPasswordHash()
                 .equals(hashUtil.getHashedPassword(password))) {
-            // Generate a token (for simplicity, using email as token)
             try {
                 String token = authServiceHelper.generateAndStoreToken(employeeCredential.getEmployee().getId());
                 return LoginResponseDto.builder()

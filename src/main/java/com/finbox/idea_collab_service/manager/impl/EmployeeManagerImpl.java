@@ -2,6 +2,7 @@ package com.finbox.idea_collab_service.manager.impl;
 
 import com.finbox.idea_collab_service.entity.Employee;
 import com.finbox.idea_collab_service.exception.ResourceNotFoundException;
+import com.finbox.idea_collab_service.exception.UserNotFoundException;
 import com.finbox.idea_collab_service.manager.EmployeeManager;
 import com.finbox.idea_collab_service.repository.EmployeeRepository;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,8 @@ public class EmployeeManagerImpl implements EmployeeManager{
     @Override
     public Employee getEmployeeById(String id) {
         if (id != null && !id.isEmpty()) {
-            return employeeRepository.getEmployeesById(id).orElseThrow(() -> new ResourceNotFoundException(
-                    String.format("Idea does not exist  %s", id)));
+            return employeeRepository.getEmployeesById(id).orElseThrow(() -> new UserNotFoundException(
+                    String.format("User does not exist  %s", id)));
         }
         return null;
     }

@@ -5,6 +5,7 @@ import com.finbox.idea_collab_service.dto.reponse.LoginResponseDto;
 import com.finbox.idea_collab_service.dto.request.LoginDto;
 import com.finbox.idea_collab_service.service.AuthService;
 import com.finbox.idea_collab_service.utils.ResponseBuilder;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Operation(summary = "Login to the application")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IdeaColabSvcResponse<LoginResponseDto>> login(
             @RequestBody LoginDto loginDto) {

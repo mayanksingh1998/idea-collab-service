@@ -8,6 +8,7 @@ import com.finbox.idea_collab_service.dto.request.CollaborationActionRequestDto;
 import com.finbox.idea_collab_service.entity.CollaborationRequest;
 import com.finbox.idea_collab_service.entity.Employee;
 import com.finbox.idea_collab_service.entity.Idea;
+import com.finbox.idea_collab_service.exception.UserNotAllowedForVoteException;
 import com.finbox.idea_collab_service.helper.IdeaCollaborationServiceHelper;
 import com.finbox.idea_collab_service.manager.CollaborationRequestManager;
 import com.finbox.idea_collab_service.manager.EmployeeManager;
@@ -43,6 +44,9 @@ public class IdeaCollaborationServiceImpl implements IdeaCollaborationService {
     public IdeaColabResponse raiseCollaborationRequest(CollabRequestDto collabRequestDto, String employeeId) {
         Idea idea = ideaManager.getIdeaById(collabRequestDto.getIdeaId());
         Employee employee = employeeManager.getEmployeeById(employeeId);
+        if (idea.getCreatedBy().equals(employee)) {
+            throw new UserNotAllowedForVoteException("User cannot raise a collaboration request on their own idea");
+        }
         CollaborationRequest collaborationRequest = collabRequestMapper.toDto(collabRequestDto, idea, employee);
         CollaborationRequest savedCollaborationRequest = ideaCollabManager.createCollaborationRequest(collaborationRequest);
         return collabRequestMapper.toResponse(savedCollaborationRequest);

@@ -3,6 +3,7 @@ package com.finbox.idea_collab_service.service;
 import com.finbox.idea_collab_service.dto.reponse.AllIdeasResponseDto;
 import com.finbox.idea_collab_service.dto.reponse.IdeaReactionsResponseDto;
 import com.finbox.idea_collab_service.dto.reponse.IdeaResponse;
+import com.finbox.idea_collab_service.dto.reponse.MetaDataResponse;
 import com.finbox.idea_collab_service.dto.request.CreateIdeaRequest;
 import com.finbox.idea_collab_service.dto.request.IdeaFilterRequest;
 import com.finbox.idea_collab_service.dto.request.IdeaReactionRequestDto;
@@ -14,6 +15,8 @@ public interface IdeaService {
     Idea createIdea(CreateIdeaRequest createIdeaRequest, String employeeId);
 
     IdeaResponse getIdeaById(String ideaId);
+
+    MetaDataResponse getMetaData(String employeeId);
 
     AllIdeasResponseDto getFilteredIdeas(IdeaFilterRequest request);
 
