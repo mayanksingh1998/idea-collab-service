@@ -1,217 +1,245 @@
-# 💡 Idea Collaboration Service
+# Idea Collaboration Service
 
-A Spring Boot RESTful service for managing employee ideas, collaborations, and reactions in an organization.
-
-## 📦 Modules Overview
-
-- **Authentication**: Login and onboarding of employees
-- **Employee**: Manage and fetch employee details
-- **Idea**: Create, post, react, and retrieve ideas
-- **Collaboration**: Request and manage idea collaborations
+This is a Spring Boot-based backend application for managing and collaborating on ideas within an organization. It supports features like user authentication, idea creation, collaboration, tagging, reactions, and more.
 
 ---
 
-## 🛡️ Authentication
+## 🚀 Getting Started
 
-### 🔐 Login
+### Prerequisites
+- Java 17+
+- Docker & Docker Compose
 
-**POST** `/auth/employee/login`
+### Using Makefile
 
-```json
-Request:
-{
-  "email": "jane@finbox.com",
-  "password": "securePass123"
-}
-```
-
-**Response:** Returns a JWT token with employee info.
-
----
-
-## 👤 Employee APIs
-
-### 🧾 Get Logged-in Employee
-
-**GET** `/employee`
-
-**Headers:** `employeeId: <id>` (set internally from token/request)
-
----
-
-### ✍️ Onboard New Employee
-
-**POST** `/skip-auth/employee`
-
-```json
-Request:
-{
-"name": "Mayank singh h",
-"email": "mayank3@gmail.com",
-"role": "DEVELOPER",
-"department": "ENGINEERING",
-"location": "New York",
-"managerId": "EMP12345",
-"password": "mayank123"
-}
-
-```
-
----
-
-### 💡 Get Ideas Created by an Employee
-
-**GET** `/employee/ideas`
-
-**Header:**
-```http
-employeeId: emp123
-```
-
----
-
-### 🤝 Get Collaboration Requests for Employee
-
-**GET** `/employee/idea/collaborations`
-
----
-
-## 💡 Idea APIs
-
-### ➕ Create a New Idea
-
-**POST** `/idea`
-
-```json
-Request:
-{
-  "title": "New AI Tool",
-  "description": "An idea for internal AI-powered documentation",
-  "tagIds": ["tag123", "tag456"]
-}
-```
-
----
-
-### 👍 React to an Idea
-
-**PUT** `/idea/{ideaId}/react`
-
-```json
-Request:
-{
-  "reactionType": "UPVOTE"
-}
-```
-
----
-
-### 📤 Post an Idea
-
-**PUT** `/idea/{ideaId}/post`
-
----
-
-### 🔍 Get Idea by ID
-
-**GET** `/idea/{ideaId}`
-
----
-
-### 📊 Get Reactions on Idea
-
-**GET** `/idea/{ideaId}/reactions`
-
----
-
-### 🧃 Filter Ideas
-
-**POST** `/idea/filter`
-
-```json
-Request:
-{
-  "employeeIds": ["emp123", "emp456"],
-  "statuses": ["APPROVED", "OPEN"],
-  "tags": ["AI", "Tech"],
-  "startDate": "2024-12-01T00:00:00",
-  "endDate": "2025-04-10T23:59:59",
-  "sortBy": "votesCount",
-  "order": "desc"
-}
-```
-
----
-
-## 🤝 Collaboration APIs
-
-### 📨 Raise a Collaboration Request
-
-**POST** `/idea/collaborate`
-
-```json
-Request:
-{
-  "ideaId": "idea123",
-  "message": "Would love to work on this!"
-}
-```
-
----
-
-### ✅ Respond to a Collaboration Request
-
-**PUT** `/idea/collaborate/{collaborateId}`
-
-```json
-Request:
-{
-  "action": "ACCEPT"
-}
-```
-
----
-
-### 📥 Get Collaborations for an Idea
-
-**GET** `/idea/{ideaId}/collaborations`
-
----
-
-## 🛠️ Dev Commands
-
-Use the `Makefile` for local development:
-
+#### Build and Run the Project
 ```bash
-make up      # Start server
-make test    # Run tests
-make down    # Stop containers
-make logs    # View logs
+make up
 ```
 
----
+#### Stop the Services
+```bash
+make down
+```
 
-## 🔐 Security
-
-- Authenticated endpoints require a JWT token or an internal `employeeId` header (mocked in request for now).
-- Spring Security can be added for production-grade auth.
-
----
-
-## 🧪 Testing
-
-Unit tests are under `src/test/java`. Run with:
-
+#### Run Tests
 ```bash
 make test
 ```
 
+### Access Swagger UI
+Once running, go to:
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
 ---
 
-## 🧱 Tech Stack
+## 📦 API Endpoints Overview
 
+### 🔐 AuthController
+#### `POST /api/v1/auth/login`
+- **Request:**
+```json
+{
+  "email": "user@example.com",
+  "password": "secret"
+}
+```
+- **Response:**
+```json
+{
+  "token": "jwt-token-here",
+  "employeeId": 1,
+  "name": "John Doe"
+}
+```
+
+---
+
+### 👤 EmployeeController
+#### `POST /api/v1/employee`
+- **Request:**
+```json
+{
+  "email": "jane@company.com",
+  "name": "Jane Smith"
+}
+```
+- **Response:**
+```json
+{
+  "message": "Employee created successfully",
+  "employeeId": 2
+}
+```
+
+#### `GET /api/v1/employee/{employeeId}/ideas`
+- **Response:**
+```json
+[
+  {
+    "id": 1,
+    "title": "Improve onboarding",
+    "description": "Streamline new hire process",
+    "status": "OPEN"
+  }
+]
+```
+
+---
+
+### 💡 IdeaController
+#### `POST /api/v1/idea`
+- **Request:**
+```json
+{
+  "title": "New Feature X",
+  "description": "Details about feature X",
+  "creatorId": 1,
+  "tagIds": [1, 2]
+}
+```
+- **Response:**
+```json
+{
+  "id": 10,
+  "message": "Idea created successfully"
+}
+```
+
+#### `GET /api/v1/idea/{id}`
+- **Response:**
+```json
+{
+  "id": 10,
+  "title": "New Feature X",
+  "description": "Details about feature X",
+  "status": "ACTIVE",
+  "tags": ["Innovation", "Tech"]
+}
+```
+
+#### `POST /api/v1/idea/filter`
+- **Request:**
+```json
+{
+  "status": "OPEN",
+  "tagIds": [1, 2]
+}
+```
+- **Response:**
+```json
+[
+  {
+    "id": 10,
+    "title": "New Feature X",
+    "status": "ACTIVE"
+  }
+]
+```
+
+#### `POST /api/v1/idea/react`
+- **Request:**
+```json
+{
+  "ideaId": 10,
+  "employeeId": 1,
+  "action": "UP_VOTE"
+}
+```
+- **Response:**
+```json
+{
+  "message": "Reaction saved"
+}
+```
+
+---
+
+### 🤝 IdeaCollaborationController
+#### `POST /api/v1/idea/collaboration/request`
+- **Request:**
+```json
+{
+  "ideaId": 10,
+  "description": "wwvkuvwku",
+}
+```
+- **Response:**
+```json
+{
+  "message": "Collaboration request sent"
+}
+```
+
+#### `POST /api/v1/idea/collaboration/action`
+- **Request:**
+```json
+{
+  "collaborationRequestId": 5,
+  "action": "ACCEPT"
+}
+```
+- **Response:**
+```json
+{
+  "message": "Collaboration request accepted"
+}
+```
+
+---
+
+### 🏷️ TagController
+#### `POST /api/v1/tag`
+- **Request:**
+```json
+{
+  "name": "Innovation"
+}
+```
+- **Response:**
+```json
+{
+  "id": 1,
+  "message": "Tag created"
+}
+```
+
+#### `GET /api/v1/tag`
+- **Response:**
+```json
+[
+  { "id": 1, "name": "Innovation" },
+  { "id": 2, "name": "Efficiency" }
+]
+```
+
+---
+
+## 🧩 Entities & Relationships
+
+**Employee** 1---* **Idea**
+
+**Idea** *---* **Tag** (ManyToMany)
+
+**Idea** 1---* **IdeaReaction**
+
+**Idea** 1---* **IdeaCollaborationRequest**
+
+**Employee** 1---* **IdeaReaction**
+
+**Employee** 1---* **IdeaCollaborationRequest**
+
+---
+
+## 🛠 Technologies Used
+- Java 17
 - Spring Boot
 - PostgreSQL
-- Redis
-- Liquibase
-- Docker & Docker Compose
+- Redis (for caching or token storage)
+- Liquibase (DB migrations)
+- Docker Compose
+- Swagger (OpenAPI)
+
+---
