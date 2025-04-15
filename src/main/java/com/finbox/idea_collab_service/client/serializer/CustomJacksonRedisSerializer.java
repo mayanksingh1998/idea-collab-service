@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finbox.idea_collab_service.client.exception.CacheSerializationDeSerializationException;
 import org.springframework.stereotype.Component;
 
-@Component
 public class CustomJacksonRedisSerializer implements RedisSerializer {
 
     private final ObjectMapper objectMapper;

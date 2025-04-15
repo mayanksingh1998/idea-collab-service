@@ -1,0 +1,39 @@
+# Package Files #
+*.jar
+
+
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Eclipse
+.project
+.classpath
+.c9/
+.settings/
+
+
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+
+# Gradle
+.gradle
+build/
+
+# Liquibase
+liquibase.*
+/liquibase/*/output.txt
+
+# Docker
+*.env
+.env
+docker-compose.yml
+
+# Local Redis/PGSQL data if mapped
+redis-data/
+pg-data/
