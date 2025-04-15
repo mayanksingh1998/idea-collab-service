@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "idea_vote", uniqueConstraints = {
+@Table(name = "idea_reaction", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"idea_id", "employee_id"})
 })
 @Getter
