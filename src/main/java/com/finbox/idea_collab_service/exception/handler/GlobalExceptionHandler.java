@@ -1,9 +1,8 @@
 package com.finbox.idea_collab_service.exception.handler;
 
 
-import com.finbox.idea_collab_service.exception.AuthTokenExpiredException;
-import com.finbox.idea_collab_service.exception.ResourceNotFoundException;
-import com.finbox.idea_collab_service.exception.UserNotAllowedForVoteException;
+import com.finbox.idea_collab_service.exception.*;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,14 +30,35 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
-//    @ExceptionHandler(DuplicateRequestException.class)
-//    public ResponseEntity<Object> handleDuplicateRequest(DuplicateRequestException ex) {
-//        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
-//    }
+    @ExceptionHandler(value = {IllegalArgumentException.class, BadRequestException.class})
+    public ResponseEntity<Object> handleBadRequest(Exception ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    public ResponseEntity<Object> handleBUserNotFoundException(Exception ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {InvalidIdeaReactionException.class})
+    public ResponseEntity<Object> handleInvalidIdeaReactionException(Exception ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {IdeaNotActiveException.class})
+    public ResponseEntity<Object> handleIdeaNotActiveException(Exception ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {UserNotAuthorizedException.class})
+    public ResponseEntity<Object> handleUserNotAuthorizedException(Exception ex) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
 
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleGeneric(Exception ex) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong 2.");
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     private ResponseEntity<Object> buildResponse(HttpStatus status, String message) {

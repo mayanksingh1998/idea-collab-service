@@ -17,65 +17,9 @@ import java.util.List;
 public class CollaborationRequestManagerImpl implements CollaborationRequestManager {
 
     private final CollaborationRequestRepository collaborationRequestRepository;
-    private final IdeaRepository ideaRepository;
-    private final EmployeeRepository employeeRepository;
 
-    public CollaborationRequestManagerImpl(CollaborationRequestRepository collaborationRequestRepository, IdeaRepository ideaRepository, EmployeeRepository employeeRepository) {
+    public CollaborationRequestManagerImpl(CollaborationRequestRepository collaborationRequestRepository) {
         this.collaborationRequestRepository = collaborationRequestRepository;
-        this.ideaRepository = ideaRepository;
-        this.employeeRepository = employeeRepository;
-    }
-
-    @Override
-    public void createCollaborationRequest(String ideaId, String employeeId, String description) {
-        if (ideaId == null || employeeId == null) {
-            throw new IllegalArgumentException("Idea ID and Employee ID cannot be null");
-        }
-
-        // Check if the idea exists
-        Idea idea = ideaRepository.findIdeaById(ideaId)
-                .orElseThrow(() -> new ResourceNotFoundException("Idea not found with ID: " + ideaId));
-
-        // Check if the employee exists
-        Employee employee = employeeRepository.getEmployeesById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
-
-
-        // Create and save the collaboration request
-        CollaborationRequest collaborationRequest = CollaborationRequest.builder()
-                .description(description)
-                .status(RequestStatus.PENDING)
-                .idea(idea)
-                .employee(employee).build();
-        collaborationRequestRepository.save(collaborationRequest);
-
-    }
-
-    @Override
-    public void acceptCollaborationRequest(String requestId, String employeeId) {
-        if (requestId == null || employeeId == null) {
-            throw new IllegalArgumentException("Request ID and Employee ID cannot be null");
-        }
-
-        // Check if the collaboration request exists
-        CollaborationRequest collaborationRequest = collaborationRequestRepository.findCollaborationRequestById(requestId)
-                .orElseThrow(() -> new ResourceNotFoundException("Collaboration request not found with ID: " + requestId));
-
-        // Update the status of the collaboration request to ACCEPTED
-        collaborationRequest.setStatus(RequestStatus.ACCEPTED);
-        collaborationRequestRepository.save(collaborationRequest);
-
-
-    }
-
-    @Override
-    public void rejectCollaborationRequest(String requestId, String employeeId) {
-
-    }
-
-    @Override
-    public void cancelCollaborationRequest(String requestId, String employeeId) {
-
     }
 
     @Override

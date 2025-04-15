@@ -16,7 +16,6 @@ public class HashUtil {
 
             byte[] encodedHash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
 
-            // Convert byte array into hex string
             StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
             for (byte b : encodedHash) {
                 String hex = Integer.toHexString(0xff & b);

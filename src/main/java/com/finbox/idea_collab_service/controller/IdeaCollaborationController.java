@@ -7,6 +7,7 @@ import com.finbox.idea_collab_service.dto.request.CollabRequestDto;
 import com.finbox.idea_collab_service.dto.request.CollaborationActionRequestDto;
 import com.finbox.idea_collab_service.service.IdeaCollaborationService;
 import com.finbox.idea_collab_service.utils.ResponseBuilder;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class IdeaCollaborationController {
         this.ideaCollaborationService = ideaCollaborationService;
     }
 
+    @Operation(summary = "Raise a collaboration request")
     @PostMapping(value = "/collaborate", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IdeaColabSvcResponse<IdeaColabResponse>> raiseCollaborationRequest(
             @RequestBody CollabRequestDto collabRequestDto,
@@ -34,6 +36,7 @@ public class IdeaCollaborationController {
                 ideaCollaborationService.raiseCollaborationRequest(collabRequestDto, employeeId), HttpStatus.OK);
     }
 
+    @Operation(summary = "Change collab request status")
     @PutMapping(value = "/collaborate/{collaborateId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IdeaColabSvcResponse<Boolean>> respondToCollaborationRequest(
             @NonNull @PathVariable("collaborateId") String collaborateId,
@@ -41,6 +44,8 @@ public class IdeaCollaborationController {
         return ResponseBuilder.build(
                 ideaCollaborationService.respondToCollaborationRequest(collaborateId, collaborationActionRequestDto), HttpStatus.OK);
     }
+
+    @Operation(summary = "Get collaboration requests by idea ID")
     @GetMapping(value = "/{ideaId}/collaborations", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IdeaColabSvcResponse<IdeaCollaborationsResponse>> getIdeaCollaborations(
             @NonNull @PathVariable("ideaId") String ideaId) {

@@ -10,7 +10,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "tag")
 @Accessors(chain = true)

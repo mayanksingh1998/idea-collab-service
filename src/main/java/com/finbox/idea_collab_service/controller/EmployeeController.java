@@ -10,6 +10,7 @@
     import com.finbox.idea_collab_service.service.EmployeeService;
     import com.finbox.idea_collab_service.service.IdeaCollaborationService;
     import com.finbox.idea_collab_service.utils.ResponseBuilder;
+    import io.swagger.v3.oas.annotations.Operation;
     import jakarta.servlet.http.HttpServletRequest;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.MediaType;
@@ -29,6 +30,7 @@
             this.ideaCollaborationService = ideaCollaborationService;
         }
 
+        @Operation(summary = "Get employee details")
         @GetMapping(value = "/employee", produces = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<IdeaColabSvcResponse<Employee>> getEmployee(HttpServletRequest request) {
             String employeeId = (String) request.getAttribute("employeeId");
@@ -36,6 +38,7 @@
                     employeeService.getEmployeeById(employeeId), HttpStatus.OK);
         }
 
+        @Operation(summary = "Onboard a new employee")
         @PostMapping(value = "/skip-auth/employee", produces = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<IdeaColabSvcResponse<Employee>> addEmployee(
                 @RequestBody AddEmployeeRequestDto addEmployeeRequestDto) {
@@ -43,6 +46,7 @@
                     employeeService.onboardEmployee(addEmployeeRequestDto), HttpStatus.OK);
         }
 
+        @Operation(summary = "Get employee ideas")
         @GetMapping(value = "/employee/ideas", produces = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<IdeaColabSvcResponse<EmployeeIdeasDto>> getEmployeeIdeas(
                 @NonNull @RequestHeader String employeeId) {
@@ -50,6 +54,7 @@
                     employeeService.getEmployeeIdeas(employeeId), HttpStatus.OK);
         }
 
+        @Operation(summary = "Get employee collaboration requests")
         @GetMapping(value = "/employee/idea/collaborations", produces = MediaType.APPLICATION_JSON_VALUE)
         public ResponseEntity<IdeaColabSvcResponse<EmployeeCollaborationsResponseDto>> getIdeaCollaborations(HttpServletRequest request) {
             String employeeId = (String) request.getAttribute("employeeId");

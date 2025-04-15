@@ -1,9 +1,6 @@
 package com.finbox.idea_collab_service.controller;
 
-import com.finbox.idea_collab_service.dto.reponse.AllIdeasResponseDto;
-import com.finbox.idea_collab_service.dto.reponse.IdeaColabSvcResponse;
-import com.finbox.idea_collab_service.dto.reponse.IdeaReactionsResponseDto;
-import com.finbox.idea_collab_service.dto.reponse.IdeaResponse;
+import com.finbox.idea_collab_service.dto.reponse.*;
 import com.finbox.idea_collab_service.dto.request.CreateIdeaRequest;
 import com.finbox.idea_collab_service.dto.request.IdeaFilterRequest;
 import com.finbox.idea_collab_service.dto.request.IdeaReactionRequestDto;
@@ -40,6 +37,13 @@ public class IdeaController {
         String employeeId = (String) request.getAttribute("employeeId");
         return ResponseBuilder.build(
                 ideaService.createIdea(createIdeaRequest, employeeId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/meta-data", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<IdeaColabSvcResponse<MetaDataResponse>> getMetaData(HttpServletRequest request) {
+        String employeeId = (String) request.getAttribute("employeeId");
+        return ResponseBuilder.build(
+                ideaService.getMetaData(employeeId), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{ideaId}/react", produces = MediaType.APPLICATION_JSON_VALUE)

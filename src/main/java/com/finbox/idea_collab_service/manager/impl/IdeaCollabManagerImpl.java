@@ -25,23 +25,6 @@ public class IdeaCollabManagerImpl implements IdeaCollabManager {
     }
 
     @Override
-    public void acceptCollaborationRequest(String requestId) {
-        // Implementation here
-    }
-
-    @Override
-    public void rejectCollaborationRequest(String requestId) {
-        // Implementation here
-    }
-
-
-
-    @Override
-    public void getCollaborationRequestsByEmployeeId(String employeeId) {
-        // Implementation here
-    }
-
-    @Override
     public CollaborationRequest getCollaborationRequestById(String requestId) {
         return collaborationRequestRepository.findCollaborationRequestById(requestId)
                 .orElseThrow(() -> new RuntimeException("Collaboration request not found"));
