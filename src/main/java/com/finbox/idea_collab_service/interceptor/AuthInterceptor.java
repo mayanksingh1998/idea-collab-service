@@ -14,29 +14,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     private AuthService authService;
 
-//    @Override
-//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        String authHeader = request.getHeader("token");
-//
-//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//            response.getWriter().write("Missing or invalid Authorization header");
-//            return false;
-//        }
-//
-//        String token = authHeader.substring(7);
-//        String employeeId = authService.authenticateAndGetEmployeeId(token); // Validate and extract employeeId
-//
-//        if (employeeId == null) {
-//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//            response.getWriter().write("Invalid or expired token");
-//            return false;
-//        }
-//
-//        request.setAttribute("employeeId", employeeId);
-//        return true;
-//    }
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");

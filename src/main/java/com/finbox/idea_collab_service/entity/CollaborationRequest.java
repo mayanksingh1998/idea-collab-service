@@ -27,11 +27,11 @@ public class CollaborationRequest {
     @Column(name = "id", nullable = false)
     private String id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idea_id")
     private Idea idea;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 

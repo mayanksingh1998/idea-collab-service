@@ -1,11 +1,11 @@
 package com.finbox.idea_collab_service.manager.impl;
 
-import com.finbox.idea_collab_service.dto.enums.IdeaReactionAction;
 import com.finbox.idea_collab_service.entity.*;
 import com.finbox.idea_collab_service.exception.ResourceNotFoundException;
+import com.finbox.idea_collab_service.exception.UserNotAllowedForVoteException;
 import com.finbox.idea_collab_service.manager.IdeaManager;
 import com.finbox.idea_collab_service.repository.IdeaRepository;
-import com.finbox.idea_collab_service.repository.IdeaVoteRepository;
+import com.finbox.idea_collab_service.repository.IdeaReactionRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,18 +22,18 @@ public class IdeaManagerImpl implements IdeaManager {
      * @param ideaRepository the repository to be used for idea management
      */
 
-    private final IdeaVoteRepository ideaVoteRepository;
+    private final IdeaReactionRepository ideaReactionRepository;
 
     private final EmployeeManagerImpl employeeManager;
 
-    public IdeaManagerImpl(IdeaRepository ideaRepository, IdeaVoteRepository ideaVoteRepository, EmployeeManagerImpl employeeManager) {
+    public IdeaManagerImpl(IdeaRepository ideaRepository, IdeaReactionRepository ideaReactionRepository, EmployeeManagerImpl employeeManager) {
         this.ideaRepository = ideaRepository;
-        this.ideaVoteRepository = ideaVoteRepository;
+        this.ideaReactionRepository = ideaReactionRepository;
         this.employeeManager = employeeManager;
     }
 
     @Override
-    public Idea createIdea(Idea idea) {
+    public Idea createOrUpdateIdea(Idea idea) {
         if (idea == null) {
 //            TODO: add custom exception
             throw new IllegalArgumentException("Idea cannot be null");
@@ -77,8 +77,16 @@ public class IdeaManagerImpl implements IdeaManager {
              employee = employeeManager.getEmployeeById(employeeId);
         } catch (ResourceNotFoundException e) {
 //            TODO: add custom exception
+            System.out.println("----------------++-----------------------");
+
             throw new ResourceNotFoundException(
-                    String.format("Employee does not exist  %s", employeeId));
+
+            String.format("Employee does not exist  %s", employeeId));
+        }
+        if (idea.getCreatedBy().getId().equals(employee.getId())) {
+            System.out.println("---------------------------------------");
+            throw new UserNotAllowedForVoteException("User cannot vote on their own idea");
+
         }
         if (upvote == VoteStatus.UPVOTE){
             idea.setVotesCount(idea.getVotesCount() + 1);
@@ -87,15 +95,16 @@ public class IdeaManagerImpl implements IdeaManager {
             idea.setVotesCount(idea.getVotesCount() - 1);
             ideaRepository.save(idea);
         } else {
+            System.out.println("--------99999-------------------------------");
             throw new IllegalArgumentException("Invalid vote status");
 
         }
 
-        IdeaVote ideaVote = new IdeaVote();
-        ideaVote.setIdea(idea);
-        ideaVote.setEmployee(employee);
-        ideaVote.setVoteStatus(upvote);
-        ideaVoteRepository.save(ideaVote);
+        IdeaReaction ideaReaction = new IdeaReaction();
+        ideaReaction.setIdea(idea);
+        ideaReaction.setEmployee(employee);
+        ideaReaction.setVoteStatus(upvote);
+        ideaReactionRepository.save(ideaReaction);
     }
 
     @Override
@@ -120,13 +129,13 @@ public class IdeaManagerImpl implements IdeaManager {
     }
 
     @Override
-    public IdeaVote getIdeaVoteById(String ideaVoteId) {
-        return ideaVoteRepository.findIdeaVoteById(ideaVoteId).orElseThrow(() -> new ResourceNotFoundException(
+    public IdeaReaction getIdeaVoteById(String ideaVoteId) {
+        return ideaReactionRepository.findIdeaVoteById(ideaVoteId).orElseThrow(() -> new ResourceNotFoundException(
                 String.format("IdeaVote does not exist for IdeaVote id = %s", ideaVoteId)));
     }
 
     @Override
-    public List<IdeaVote> getIdeaVotesByIdeaId(String ideaId) {
-        return ideaVoteRepository.findIdeaVotesByIdeaId(ideaId);
+    public List<IdeaReaction> getIdeaReactionsByIdeaId(String ideaId) {
+        return ideaReactionRepository.findIdeaReactionsByIdeaId(ideaId);
     }
 }

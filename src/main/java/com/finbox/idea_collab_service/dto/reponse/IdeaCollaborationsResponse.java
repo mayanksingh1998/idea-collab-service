@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IdeaCollaborationsResponse {
-    List<CollaborationRequest> collaborationRequests;
+    List<CollaborationRequestResponseDto> collaborationRequestResponseDtos;
 }

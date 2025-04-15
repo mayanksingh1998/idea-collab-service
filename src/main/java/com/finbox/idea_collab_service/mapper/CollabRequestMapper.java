@@ -1,7 +1,6 @@
 package com.finbox.idea_collab_service.mapper;
 
-import com.finbox.idea_collab_service.dto.reponse.IdeaColabResponse;
-import com.finbox.idea_collab_service.dto.reponse.IdeaCollaborationsResponse;
+import com.finbox.idea_collab_service.dto.reponse.*;
 import com.finbox.idea_collab_service.dto.request.CollabRequestDto;
 import com.finbox.idea_collab_service.entity.CollaborationRequest;
 import com.finbox.idea_collab_service.entity.Employee;
@@ -31,12 +30,39 @@ public class CollabRequestMapper {
      }
 
      public IdeaCollaborationsResponse toCollaborationRequestResponse(List<CollaborationRequest> collaborationRequests) {
-           return IdeaCollaborationsResponse.builder()
-                   .collaborationRequests(collaborationRequests)
-                   .build();
+         List<CollaborationRequestResponseDto> collaborationRequestResponseDto = collaborationRequests.stream()
+                 .map(collaborationRequest -> {
+                     CollaborationRequestResponseDto dto = new CollaborationRequestResponseDto();
+                     dto.setEmployeeCollaborationDto(EmployeeCollaborationDto.builder()
+                             .collaborationId(collaborationRequest.getId())
+                             .collaborationDescription(collaborationRequest.getDescription())
+                             .collaborationStatus(collaborationRequest.getStatus().toString())
+                             .createdAt(collaborationRequest.getRequestAt()).build());
+                     dto.setEmployeeId(collaborationRequest.getEmployee().getId());
+                        dto.setEmployeeName(collaborationRequest.getEmployee().getName());
+                     return dto;
+                 })
+                 .toList();
+
+         return IdeaCollaborationsResponse.builder()
+                 .collaborationRequestResponseDtos(collaborationRequestResponseDto)
+                 .build();
      }
 
-    // public CollabRequest toEntity(CollabRequestDTO collabRequestDTO) {
-    //     // Implement the mapping logic
-    // }
+    public EmployeeCollaborationsResponseDto toEmployeeCollaborationResponse(List<CollaborationRequest> collaborationRequests) {
+        List<EmployeeCollaborationDto> collaborationRequestResponseDto = collaborationRequests.stream()
+                .map(collaborationRequest -> {
+                    EmployeeCollaborationDto dto = new EmployeeCollaborationDto();
+                    dto.setCollaborationId(collaborationRequest.getId());
+                    dto.setCollaborationDescription(collaborationRequest.getDescription());
+                    dto.setCollaborationStatus(collaborationRequest.getStatus().toString());
+                    dto.setCreatedAt(collaborationRequest.getRequestAt());
+                    return dto;
+                })
+                .toList();
+
+        return EmployeeCollaborationsResponseDto.builder()
+                .employeeCollaborationDtos(collaborationRequestResponseDto)
+                .build();
+    }
 }

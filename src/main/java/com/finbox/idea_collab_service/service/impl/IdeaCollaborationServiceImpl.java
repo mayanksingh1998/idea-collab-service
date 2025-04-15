@@ -1,5 +1,6 @@
 package com.finbox.idea_collab_service.service.impl;
 
+import com.finbox.idea_collab_service.dto.reponse.EmployeeCollaborationsResponseDto;
 import com.finbox.idea_collab_service.dto.reponse.IdeaColabResponse;
 import com.finbox.idea_collab_service.dto.reponse.IdeaCollaborationsResponse;
 import com.finbox.idea_collab_service.dto.request.CollabRequestDto;
@@ -48,30 +49,15 @@ public class IdeaCollaborationServiceImpl implements IdeaCollaborationService {
     }
 
     @Override
-    public void acceptCollaborationRequest(String requestId) {
-
-    }
-
-    @Override
-    public void rejectCollaborationRequest(String requestId) {
-
-    }
-
-    @Override
     public IdeaCollaborationsResponse getCollaborationRequestsByIdeaId(String ideaId) {
         List<CollaborationRequest> collaborationRequests = collaborationRequestManager.getCollaborationRequestsByIdeaId(ideaId);
         return collabRequestMapper.toCollaborationRequestResponse(collaborationRequests);
     }
 
     @Override
-    public IdeaCollaborationsResponse getCollaborationRequestsByEmployeeId(String employeeId) {
+    public EmployeeCollaborationsResponseDto getCollaborationRequestsByEmployeeId(String employeeId) {
         List<CollaborationRequest> collaborationRequests = collaborationRequestManager.getCollaborationRequestsByEmployeeId(employeeId);
-        return collabRequestMapper.toCollaborationRequestResponse(collaborationRequests);
-
-    }
-
-    @Override
-    public void getCollaborationRequestById(String requestId) {
+        return collabRequestMapper.toEmployeeCollaborationResponse(collaborationRequests);
 
     }
 
